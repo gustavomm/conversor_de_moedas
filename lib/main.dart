@@ -5,13 +5,13 @@ import "dart:convert";
 
 const request = "https://api.hgbrasil.com/finance?key=b3549cf3";
 
-void main() async{
-
-  http.Response response = await http.get(request);
-
-  print(json.decode(response.body)["results"]["currencies"]);
-
+void main() {
   runApp(MaterialApp(home: Home(),));
+}
+
+Future<Map> getData() async {
+  http.Response response = await http.get(request);
+  return json.decode(response.body);
 }
 
 class Home extends StatefulWidget {
