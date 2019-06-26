@@ -8,6 +8,10 @@ const request = "https://api.hgbrasil.com/finance?key=b3549cf3";
 void main() {
   runApp(MaterialApp(
     home: Home(),
+    theme: ThemeData(
+      primaryColor: Colors.amberAccent,
+      hintColor: Colors.amberAccent
+    )
   ));
 }
 
@@ -46,7 +50,8 @@ class _HomeState extends State<Home> {
                         textAlign: TextAlign.center),
                   );
                 default:
-                  if (snapshot.hasError) {
+                  print(snapshot.data);
+                  if (snapshot.hasError || snapshot.data["results"]["currencies"] == null) {
                     return Center(
                       child: Text("Erro ao Carregar Dados :(",
                           style: TextStyle(color: Colors.white70, fontSize: 25),
@@ -54,29 +59,57 @@ class _HomeState extends State<Home> {
                     );
                   } else {
                     dolar =
-                    snapshot.data["results"]["currencies"]["USD"]["buy"];
+                        snapshot.data["results"]["currencies"]["USD"]["buy"];
                     euro = snapshot.data["results"]["currencies"]["EUR"]["buy"];
                     return SingleChildScrollView(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Icon(Icons.monetization_on, size: 150,
-                                color: Colors.amberAccent),
-                            TextField(
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                labelText: "Reais",
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Icon(Icons.monetization_on,
+                            size: 150, color: Colors.amberAccent),
+                        TextField(
+                          decoration: InputDecoration(
+                              labelText: "Reais",
+                              labelStyle: TextStyle(
+                                color: Colors.amberAccent,
+                              ),
+                              border: OutlineInputBorder(),
+                              prefixText: "R\$"),
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 20
+                          )
+                        ),
+                        Divider(),
+                        TextField(
+                            decoration: InputDecoration(
+                                labelText: "Dólares",
                                 labelStyle: TextStyle(
                                   color: Colors.amberAccent,
                                 ),
                                 border: OutlineInputBorder(),
-                                prefixText: "R\$"
-                              ),
+                                prefixText: "US\$"),
+                            style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 20
                             )
-                          ],
+                        ),
+                        Divider(),
+                        TextField(
+                            decoration: InputDecoration(
+                                labelText: "Euros",
+                                labelStyle: TextStyle(
+                                  color: Colors.amberAccent,
+                                ),
+                                border: OutlineInputBorder(),
+                                prefixText: "€"),
+                            style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 20
+                            )
                         )
-                    );
+                      ],
+                    ));
                   }
               }
             }));
